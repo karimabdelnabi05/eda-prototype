@@ -1,0 +1,135 @@
+{
+    "facts": {
+        "total_revenue": 128500000,
+        "net_income": 18200000,
+        "operating_margin": 0.142,
+        "cloud_services_revenue": 72300000,
+        "enterprise_software_revenue": 38100000,
+        "professional_services_revenue": 18100000,
+        "north_america_revenue": 76800000,
+        "europe_revenue": 33400000,
+        "asia_pacific_revenue": 18300000,
+        "q1_capex": 32000000,
+        "q2_capex": 41000000,
+        "q3_capex": 45000000,
+        "ytd_capex": 118000000,
+        "gross_margin": 0.685,
+        "free_cash_flow": 22700000,
+        "cash_equivalents": 156300000,
+        "total_debt": 45000000,
+        "eps": 1.82,
+        "total_employees": 2847,
+        "engineering_headcount": 1240,
+        "domestic_meal_allowance": 75,
+        "international_meal_allowance": 100,
+        "standard_max_flight": 1200,
+        "executive_max_flight": 5000
+    },
+    "qa_pairs": [
+        {
+            "question": "What was the total revenue in Q3 2024?",
+            "expected_answer": 128500000,
+            "method_hint": "get_total_revenue",
+            "category": "numerical",
+            "difficulty": "easy"
+        },
+        {
+            "question": "What was Q3 capital expenditure?",
+            "expected_answer": 45000000,
+            "method_hint": "get_capex",
+            "category": "numerical",
+            "difficulty": "easy"
+        },
+        {
+            "question": "Can a standard employee book a $1,500 business class flight?",
+            "expected_answer": false,
+            "method_hint": "check_travel_compliance",
+            "category": "policy",
+            "difficulty": "medium"
+        },
+        {
+            "question": "Can an executive book a $4,000 business class flight?",
+            "expected_answer": true,
+            "method_hint": "check_travel_compliance",
+            "category": "policy",
+            "difficulty": "medium"
+        },
+        {
+            "question": "What is the maximum hotel rate for standard employees?",
+            "expected_answer": 250,
+            "method_hint": "get_hotel_policy",
+            "category": "policy",
+            "difficulty": "easy"
+        },
+        {
+            "question": "How many engineers does the company employ?",
+            "expected_answer": 1240,
+            "method_hint": "get_headcount",
+            "category": "numerical",
+            "difficulty": "easy"
+        },
+        {
+            "question": "What percentage of revenue comes from Cloud Services?",
+            "expected_answer": 0.563,
+            "method_hint": "get_revenue_breakdown",
+            "category": "numerical",
+            "difficulty": "medium"
+        },
+        {
+            "question": "What is the daily meal allowance for international travel?",
+            "expected_answer": 100,
+            "method_hint": "get_meal_allowance",
+            "category": "policy",
+            "difficulty": "easy"
+        },
+        {
+            "question": "What is the operating margin?",
+            "expected_answer": 0.142,
+            "method_hint": "get_operating_margin",
+            "category": "numerical",
+            "difficulty": "easy"
+        },
+        {
+            "question": "What is the primary driver of Q2 capital expenditure?",
+            "expected_answer": "Acquisitions",
+            "method_hint": "get_capex",
+            "category": "categorical",
+            "difficulty": "medium"
+        },
+        {
+            "question": "What is the projected Q4 revenue range?",
+            "expected_answer": "135-140 million",
+            "method_hint": "get_outlook",
+            "category": "text",
+            "difficulty": "medium"
+        },
+        {
+            "question": "What is the earnings per share?",
+            "expected_answer": 1.82,
+            "method_hint": "get_eps",
+            "category": "numerical",
+            "difficulty": "easy"
+        },
+        {
+            "question": "How much cash does the company have?",
+            "expected_answer": 156300000,
+            "method_hint": "get_cash",
+            "category": "numerical",
+            "difficulty": "easy"
+        },
+        {
+            "question": "Can a Senior Manager fly business class on a 10-hour international flight?",
+            "expected_answer": true,
+            "method_hint": "check_travel_compliance",
+            "category": "policy",
+            "difficulty": "hard"
+        },
+        {
+            "question": "What is the debt-to-equity ratio?",
+            "expected_answer": 0.32,
+            "method_hint": "get_debt_equity_ratio",
+            "category": "numerical",
+            "difficulty": "easy"
+        }
+    ]
+}

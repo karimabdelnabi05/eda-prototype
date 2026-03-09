@@ -1,0 +1,67 @@
+# Acme Corporation — Q3 2024 Financial Summary
+
+## Executive Summary
+
+Acme Corporation reported strong Q3 2024 results, with total revenue of $128.5 million, up 12% year-over-year. Net income reached $18.2 million, with an operating margin of 14.2%. The company's cloud infrastructure segment drove the majority of growth.
+
+## Revenue Breakdown
+
+### By Segment
+- Cloud Services: $72.3 million (56.3% of total revenue)
+- Enterprise Software: $38.1 million (29.6% of total revenue)
+- Professional Services: $18.1 million (14.1% of total revenue)
+
+### By Region
+- North America: $76.8 million (59.8%)
+- Europe: $33.4 million (26.0%)
+- Asia-Pacific: $18.3 million (14.2%)
+
+## Capital Expenditures
+
+| Quarter | Amount | Primary Driver |
+|---------|--------|----------------|
+| Q1 | $32,000,000 | R&D |
+| Q2 | $41,000,000 | Acquisitions |
+| Q3 | $45,000,000 | Cloud Infrastructure |
+
+Total year-to-date CapEx: $118,000,000
+
+## Key Financial Metrics
+
+- Gross Margin: 68.5%
+- Operating Margin: 14.2%
+- Free Cash Flow: $22.7 million
+- Cash and Equivalents: $156.3 million
+- Total Debt: $45.0 million
+- Debt-to-Equity Ratio: 0.32
+- Earnings Per Share (EPS): $1.82
+- Total Shares Outstanding: 10,000,000
+
+## Employee Headcount
+
+Total employees: 2,847
+- Engineering: 1,240
+- Sales & Marketing: 685
+- Operations: 512
+- G&A: 410
+
+## Travel and Expense Policy
+
+### Air Travel
+- Executive level: Business class permitted up to $5,000 per flight
+- Senior Manager level: Premium economy permitted up to $2,500 per flight
+- Standard employees: Economy class only, maximum $1,200 per flight
+- All international flights over 8 hours: Business class upgrade permitted for Senior Manager and above
+
+### Hotel Policy
+- Maximum nightly rate: $250 for standard employees, $400 for executives
+- Extended stays (5+ nights): 15% discount negotiated rate required
+
+### Meal Allowances
+- Domestic travel: $75 per day
+- International travel: $100 per day
+- Client entertainment: Up to $150 per person, requires manager approval
+
+## Q4 Outlook
+
+The company projects Q4 revenue between $135-140 million, representing 15-18% year-over-year growth. Cloud Services segment is expected to grow 25% in Q4. The company plans to hire 200 additional engineers in Q4.
