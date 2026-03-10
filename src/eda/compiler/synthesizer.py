@@ -130,7 +130,7 @@ class Synthesizer:
                 {section_text}
             """).strip()
 
-            code = self._call_llm(SECTION_COMPILER_PROMPT, user_prompt)
+            code = self._call_llm(SECTION_COMPILER_PROMPT, user_prompt, call_type="compile_section")
             code = self._clean_code(code)
             section_codes.append(code)
 
@@ -144,7 +144,7 @@ class Synthesizer:
             {all_sections}
         """).strip()
 
-        merged_code = self._call_llm(MERGE_PROMPT, merge_prompt)
+        merged_code = self._call_llm(MERGE_PROMPT, merge_prompt, call_type="merge")
         merged_code = self._clean_code(merged_code)
 
         return CompilationResult(
@@ -173,11 +173,17 @@ class Synthesizer:
         patched = self._call_llm(
             "You are a Python code debugger. Fix the code and output ONLY valid Python.",
             user_prompt,
+            call_type="patch",
         )
         return self._clean_code(patched)
 
-    def _call_llm(self, system_prompt: str, user_prompt: str) -> str:
+    def _call_llm(self, system_prompt: str, user_prompt: str, call_type: str = "compile") -> str:
         """Make an LLM call using the configured provider."""
+        import time as _time
+
+        from eda.tracker import get_tracker
+
+        start = _time.perf_counter()
         response = self.client.models.generate_content(
             model=self.model,
             contents=[
@@ -188,6 +194,17 @@ class Synthesizer:
                 "temperature": config.compiler.temperature,
             },
         )
+        latency_ms = (_time.perf_counter() - start) * 1000
+
+        # Record token usage
+        tracker = get_tracker()
+        tracker.record_call(
+            call_type=call_type,
+            model=self.model,
+            response=response,
+            latency_ms=latency_ms,
+        )
+
         return response.text or ""
 
     def _clean_code(self, code: str) -> str:

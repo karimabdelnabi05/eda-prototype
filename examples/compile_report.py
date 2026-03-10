@@ -23,6 +23,9 @@ console = Console()
 
 
 def main():
+    from eda.tracker import reset_tracker
+
+    tracker = reset_tracker()  # Start fresh tracking for this run
     console.print("[bold]EDA — Compiling Financial Report[/bold]\n")
 
     # 1. Parse the sample document
@@ -68,6 +71,9 @@ def main():
         console.print(f"[red]❌ Compilation failed:[/red]")
         for error in validation.errors:
             console.print(f"   {error}")
+
+    # 4. Print usage report — tokens, cost, timing
+    tracker.print_report()
 
 
 if __name__ == "__main__":

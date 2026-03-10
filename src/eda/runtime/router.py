@@ -73,6 +73,11 @@ class Router:
         )
 
         try:
+            import time as _time
+
+            from eda.tracker import get_tracker
+
+            start = _time.perf_counter()
             response = self.client.models.generate_content(
                 model=self.model,
                 contents=[{"role": "user", "parts": [{"text": user_prompt}]}],
@@ -80,6 +85,16 @@ class Router:
                     "system_instruction": ROUTER_SYSTEM_PROMPT,
                     "temperature": config.router.temperature,
                 },
+            )
+            latency_ms = (_time.perf_counter() - start) * 1000
+
+            # Record token usage
+            tracker = get_tracker()
+            tracker.record_call(
+                call_type="route",
+                model=self.model,
+                response=response,
+                latency_ms=latency_ms,
             )
 
             method_call = (response.text or "").strip()
