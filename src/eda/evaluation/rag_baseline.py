@@ -11,8 +11,8 @@ from __future__ import annotations
 import os
 import time
 
-from langchain.chains import RetrievalQA
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_classic.chains import RetrievalQA
+from langchain_classic.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import TextLoader
 from langchain_community.vectorstores import Chroma
 from langchain_core.prompts import PromptTemplate
@@ -78,7 +78,7 @@ class RAGBaseline:
             )
             chunks = text_splitter.split_documents(documents)
 
-            embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+            embeddings = GoogleGenerativeAIEmbeddings(model="text-embedding-004")
             
             # Use an ephemeral in-memory Chroma database
             vectorstore = Chroma.from_documents(chunks, embeddings)

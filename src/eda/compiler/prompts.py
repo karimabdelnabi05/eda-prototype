@@ -24,27 +24,23 @@ You MUST follow these rules exactly:
    - Include type hints on all methods
 
 3. **Data encoding rules:**
-   - Numbers must be actual Python numbers (int/float), not strings
-   - Dates should be strings in ISO format
-   - Percentages should be floats (0.15 for 15%)
-   - Currency should be numeric with a separate currency field if needed
-   - Tables become dicts or lists of dicts
-   - Hierarchical data becomes nested dicts
+   - Numbers must be actual Python numbers (int/float), not strings.
+   - Percentages should be floats (0.15 for 15%).
+   - Tables should be stored as lists of dicts, but ALSO provide specific getter methods to access individual cells/rows.
+   - ALL significant numbers found in the text must be stored and retrievable via a specific method.
 
-4. **Method naming rules:**
-   - Data retrieval: `get_<noun>(self, ...)` → returns data
-   - Policy checks: `check_<policy_name>(self, ...)` → returns bool or result dict
-   - Calculations: `calculate_<metric>(self, ...)` → returns numeric result
-   - Listings: `list_<items>(self, ...)` → returns list
+4. **Method naming rules (PREFER GRANULARITY):**
+   - **Atomic Getters**: Create specific methods for specific facts. E.g., `get_revenue_q3()` is better than `get_financials()["q3_revenue"]`.
+   - **Policy Checkers**: Create methods for every rule/policy found. E.g., `can_employee_book_business_class(role: str, flight_duration_hours: float) -> bool`.
+   - **Data retrieval**: `get_<noun>(self, ...)` → returns the exact data point.
+   - **Policy checks**: `check_<policy_name>(self, ...)` → MUST perform the logical comparison and return `bool`.
+   - **Calculations**: `calculate_<metric>(self, ...)` → returns the calculated numeric result.
 
-5. **Completeness:** You MUST capture EVERY fact, figure, policy, rule, and data point
-   from the document. Missing information is a compilation failure.
+5. **Completeness & Atomic Access:** You MUST capture EVERY fact, figure, policy, and rule. For every number you find, ensure there is a way to retrieve JUST that number without getting a large dictionary.
 
-6. **Include a `get_summary(self) -> dict` method** that returns a dict with the
-   document's key metadata (title, date, type, key figures).
+6. **Include a `get_summary(self) -> dict` method** for high-level metadata only.
 
-7. **Include a `list_available_methods(self) -> list[str]`** method that returns
-   all public method names with brief descriptions.
+7. **Include a `list_available_methods(self) -> list[str]`** method.
 """
 
 SECTION_COMPILER_PROMPT = """You are compiling ONE SECTION of a larger document into Python methods.
@@ -90,9 +86,9 @@ available Python methods, translate the question into a single Python method cal
 
 ## Rules:
 1. Output ONLY a valid Python expression like: `obj.method_name(arg1="value", arg2=123)`
-2. Use the `obj` variable name — the actual object will be injected at runtime
-3. Match the user's intent to the most appropriate method
-4. Extract parameter values from the user's question
+2. Use the `obj` variable name — the actual object will be injected at runtime.
+3. Match the user's intent to the most ATOMIC/SPECIFIC method available. If there is a choice between a specific getter and a general summary, use the specific one.
+4. Extract parameter values from the user's question. Convert units (e.g., "$4,000" becomes `4000`).
 5. If the question doesn't match any method, output: `obj.get_summary()`
-6. NEVER output anything other than a Python expression — no text, no explanation
+6. NEVER output anything other than a Python expression.
 """

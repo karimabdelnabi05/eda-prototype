@@ -14,7 +14,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 from rich.console import Console
 
 from eda.evaluation.benchmark import Benchmark
-from eda.evaluation.dataset import DatasetManager
+from eda.evaluation.dataset import EvalDataset
 from eda.tracker import reset_tracker
 
 console = Console()
@@ -24,11 +24,13 @@ def main():
     console.print("[bold]🏆 EDA vs RAG Benchmark Runner[/bold]\n")
 
     # Load the financial report fixture
-    datasets = DatasetManager()
-    fixture = datasets.get_fixture("financial_report_q3")
+    fixtures_dir = Path(__file__).parent.parent / "tests" / "fixtures"
+    datasets = EvalDataset(fixtures_dir)
     
-    if not fixture:
-        console.print("[red]❌ Could not find the financial_report_q3 fixture.[/red]")
+    try:
+        fixture = datasets.load_fixture("sample_financial_report")
+    except Exception as e:
+        console.print(f"[red]❌ Error loading fixture: {e}[/red]")
         return
 
     console.print(f"📄 Loaded fixture: {fixture.name}")

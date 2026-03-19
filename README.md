@@ -11,9 +11,9 @@ Traditional AI treats documents as things to **search**. EDA treats documents as
 
 Instead of chunking text → embedding → vector search → LLM generation at runtime (RAG), EDA:
 
-1. **Compiles** the document into a self-contained Python class using an LLM (ahead of time)
-2. **Destroys** the original document — the compiled code IS the knowledge base
-3. **Queries** are translated into deterministic function calls — no LLM at runtime
+1.  **Compiles** the document into a self-contained Python class using an LLM (ahead of time)
+2.  **Destroys** the original document — the compiled code IS the knowledge base
+3.  **Queries** are translated into deterministic function calls — no LLM at runtime
 
 The result: **sub-millisecond query latency, zero hallucinations on data retrieval, and 100% provenance**.
 

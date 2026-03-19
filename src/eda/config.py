@@ -30,7 +30,7 @@ class RouterConfig(BaseModel):
     """Settings for the query router (Phase 3)."""
 
     model: str = Field(
-        default_factory=lambda: os.getenv("EDA_ROUTER_MODEL", "gemini-2.0-flash-lite")
+        default_factory=lambda: os.getenv("EDA_ROUTER_MODEL", "gemini-2.0-flash")
     )
     temperature: float = 0.0  # Zero temp for deterministic routing
 

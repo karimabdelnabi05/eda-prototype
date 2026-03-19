@@ -26,7 +26,7 @@ def sample_financial_text():
 @pytest.fixture
 def financial_ground_truth():
     """Load the financial report ground truth."""
-    path = FIXTURES_DIR / "ground_truth_financial.json"
+    path = FIXTURES_DIR / "ground_truth_sample_financial_report.json"
     return json.loads(path.read_text(encoding="utf-8"))
 
 

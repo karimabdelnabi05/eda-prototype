@@ -93,6 +93,11 @@ class Benchmark:
         compile_time_ms = (time.perf_counter() - compile_start) * 1000
 
         if not validation.success:
+            from rich.console import Console
+            c = Console()
+            c.print(f"[red]❌ EDA Validation Failed![/red]")
+            c.print(f"[yellow]Issues:[/yellow] {validation.issues}")
+            c.print(f"[cyan]Source Code Generated:[/cyan]\n{validation.source_code}")
             return PipelineResult(
                 pipeline_name="EDA",
                 compile_time_ms=compile_time_ms,
@@ -125,10 +130,22 @@ class Benchmark:
             q_time = (time.perf_counter() - q_start) * 1000
             query_times.append(q_time)
 
+            actual_val = exec_result.data if exec_result.success else None
+            is_correct = Metrics._values_match(actual_val, qa.expected_answer)
+            
+            console.print(f"  [cyan]Q:[/cyan] {qa.question}")
+            console.print(f"  [yellow]Expected:[/yellow] {qa.expected_answer} ({type(qa.expected_answer).__name__})")
+            console.print(f"  [magenta]Actual:[/magenta]   {actual_val} ({type(actual_val).__name__})")
+            if is_correct:
+                console.print(f"  [green]✅ Correct[/green]")
+            else:
+                console.print(f"  [red]❌ Incorrect[/red]")
+            console.print("-" * 20)
+
             query_results.append({
                 "query": qa.question,
                 "expected": qa.expected_answer,
-                "actual": exec_result.data if exec_result.success else None,
+                "actual": actual_val,
                 "success": exec_result.success,
                 "latency_ms": q_time,
             })

@@ -72,47 +72,57 @@ class Router:
             f"Translate this question into a Python method call using `obj.method_name(...)`."
         )
 
-        try:
-            import time as _time
+        import time as _time
+        from google.genai.errors import APIError
+        from eda.tracker import get_tracker
 
-            from eda.tracker import get_tracker
+        for attempt in range(3):
+            try:
+                start = _time.perf_counter()
+                response = self.client.models.generate_content(
+                    model=self.model,
+                    contents=[{"role": "user", "parts": [{"text": user_prompt}]}],
+                    config={
+                        "system_instruction": ROUTER_SYSTEM_PROMPT,
+                        "temperature": config.router.temperature,
+                    },
+                )
+                latency_ms = (_time.perf_counter() - start) * 1000
 
-            start = _time.perf_counter()
-            response = self.client.models.generate_content(
-                model=self.model,
-                contents=[{"role": "user", "parts": [{"text": user_prompt}]}],
-                config={
-                    "system_instruction": ROUTER_SYSTEM_PROMPT,
-                    "temperature": config.router.temperature,
-                },
-            )
-            latency_ms = (_time.perf_counter() - start) * 1000
+                # Record token usage
+                tracker = get_tracker()
+                tracker.record_call(
+                    call_type="route",
+                    model=self.model,
+                    response=response,
+                    latency_ms=latency_ms,
+                )
 
-            # Record token usage
-            tracker = get_tracker()
-            tracker.record_call(
-                call_type="route",
-                model=self.model,
-                response=response,
-                latency_ms=latency_ms,
-            )
+                method_call = (response.text or "").strip()
+                method_call = self._clean_method_call(method_call)
 
-            method_call = (response.text or "").strip()
-            method_call = self._clean_method_call(method_call)
+                # Parse the method name and arguments
+                method_name, arguments = self._parse_method_call(method_call)
 
-            # Parse the method name and arguments
-            method_name, arguments = self._parse_method_call(method_call)
+                return RoutingResult(
+                    original_query=query,
+                    method_call=method_call,
+                    method_name=method_name,
+                    arguments=arguments,
+                )
+            except APIError as e:
+                import logging
+                logging.warning(f"API Error during routing (attempt {attempt+1}/3): {e}. Sleeping for 15s...")
+                _time.sleep(15)
+            except Exception as e:
+                import logging
+                logging.error(f"Routing exception: {e}")
+                break
 
-            return RoutingResult(
-                original_query=query,
-                method_call=method_call,
-                method_name=method_name,
-                arguments=arguments,
-            )
-
-        except Exception:
-            # Fallback: fuzzy match method name from query keywords
-            return self._fallback_route(query, available_methods)
+        # Fallback: fuzzy match method name from query keywords
+        import logging
+        logging.warning("Falling back to fuzzy routing...")
+        return self._fallback_route(query, available_methods)
 
     def _format_methods(
         self,
