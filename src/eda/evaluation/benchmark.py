@@ -147,6 +147,45 @@ class Benchmark:
             query_results=query_results,
         )
 
+    def run_rag_benchmark(self, fixture: EvalFixture) -> PipelineResult:
+        """Run the RAG baseline on a fixture."""
+        from eda.evaluation.rag_baseline import RAGBaseline
+        
+        console.print("[dim]Initializing RAG Baseline (ChromaDB + LangChain)...[/dim]")
+        rag = RAGBaseline()
+        return rag.run_benchmark(fixture)
+
+    def run_full_comparison(self, fixture: EvalFixture) -> BenchmarkReport:
+        """Run both pipelines and return a comparison report."""
+        console.print(f"\n[bold blue]=== Starting Benchmark: {fixture.name} ===[/bold blue]")
+        
+        console.print("\n[bold]1. Running EDA Pipeline...[/bold]")
+        eda_res = self.run_eda_benchmark(fixture)
+        
+        console.print("\n[bold]2. Running RAG Baseline...[/bold]")
+        try:
+            rag_res = self.run_rag_benchmark(fixture)
+        except Exception as e:
+            console.print(f"[red]RAG Pipeline failed: {e}[/red]")
+            rag_res = PipelineResult(pipeline_name="RAG failed")
+
+        report = BenchmarkReport(eda_result=eda_res, rag_result=rag_res)
+
+        # Compute winners
+        if eda_res.accuracy >= rag_res.accuracy:
+            report.winner_accuracy = "EDA"
+        else:
+            report.winner_accuracy = "RAG"
+
+        if eda_res.avg_query_latency_ms <= rag_res.avg_query_latency_ms or not rag_res.avg_query_latency_ms:
+            report.winner_latency = "EDA"
+            if rag_res.avg_query_latency_ms and eda_res.avg_query_latency_ms > 0:
+                report.speedup_factor = rag_res.avg_query_latency_ms / eda_res.avg_query_latency_ms
+        else:
+            report.winner_latency = "RAG"
+
+        return report
+
     def print_comparison(self, report: BenchmarkReport) -> None:
         """Print a formatted comparison table."""
         table = Table(title="EDA vs RAG Benchmark Results", show_header=True)
